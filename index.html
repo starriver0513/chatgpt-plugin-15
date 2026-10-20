@@ -1,0 +1,966 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>プロが使ってるChatGPTプラグイン15選｜保存版資料</title>
+<meta name="description" content="GPTsの代わりになるChatGPTのプラグインについて、入れ方・呼び出し方から、仕事で使える15個の使い方とプロンプト、組み合わせ方、GPTsからの乗り換え、権限の設定までまとめた資料です。">
+<meta property="og:title" content="プロが使ってるChatGPTプラグイン15選｜保存版資料">
+<meta property="og:description" content="GPTsの代わりになるChatGPTのプラグインについて、入れ方・呼び出し方から、仕事で使える15個の使い方とプロンプト、組み合わせ方、GPTsからの乗り換え、権限の設定までまとめた資料です。">
+<meta name="theme-color" content="#0b2a5b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=M+PLUS+1:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  
+  --ink:#0a1020;          
+  --ink-soft:#22304a;     
+  --muted:#5c6880;        
+  --navy:#0b2a5b;         
+  --blue:#0866ff;         
+  --blue-dark:#073b9a;
+  --cyan:#28d3ff;         
+  --sky:#d9eaff;
+  --blue-soft:#eef5ff;
+  --line:#d8e4f6;
+  --bg:#f6f9ff;
+  --white:#fff;
+  --code-bg:#0b1834;      
+  --ok:#0f9d58;
+  --warn:#f59e0b;
+  --grad-hero:linear-gradient(135deg,#040c22 0%,#062a68 48%,#0a63d6 100%);
+  --grad-accent:linear-gradient(135deg,var(--cyan) 0%,var(--blue) 100%);
+  --shadow:0 18px 44px rgba(8,32,80,.12);
+  --shadow-hover:0 26px 64px rgba(8,32,80,.22);
+  --radius:18px;
+  --radius-sm:12px;
+  --max:1040px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden;scroll-padding-top:24px}
+body{
+  margin:0;color:var(--ink);background:var(--bg);
+  font-family:'Noto Sans JP',-apple-system,BlinkMacSystemFont,'Hiragino Sans',Meiryo,sans-serif;
+  line-height:1.95;font-size:16px;overflow-x:hidden;
+  background-image:
+    radial-gradient(circle at 12% -4%,rgba(8,102,255,.10),transparent 34%),
+    radial-gradient(circle at 92% 6%,rgba(40,211,255,.10),transparent 30%);
+  background-attachment:fixed;
+}
+a{color:var(--blue);font-weight:700;text-underline-offset:3px;text-decoration-thickness:2px}
+img{max-width:100%;height:auto;display:block}
+
+.progress{position:fixed;inset:0 0 auto 0;height:4px;z-index:60;background:transparent}
+.progress span{display:block;height:100%;width:0;background:var(--grad-accent);box-shadow:0 0 14px rgba(8,102,255,.6);transition:width .1s linear}
+
+.page{width:min(var(--max),calc(100vw - 32px));margin:0 auto;padding:28px 0 96px}
+
+.hero{position:relative;overflow:hidden;border-radius:26px;color:#fff;padding:clamp(30px,5vw,64px);background:var(--grad-hero);box-shadow:var(--shadow-hover)}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(135deg,rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(45deg,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:74px 74px;opacity:.6}
+.hero::after{content:"";position:absolute;width:280px;height:280px;right:-90px;top:-110px;border-radius:50%;
+  background:radial-gradient(circle,rgba(40,211,255,.35),transparent 70%);animation:float 7s ease-in-out infinite;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-glow{position:absolute;inset:-40%;z-index:0;pointer-events:none;opacity:.5;
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(120,190,255,.30),transparent 60%);transition:opacity .4s ease}
+@keyframes float{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-14px,0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+.badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  font-size:12px;font-weight:800;letter-spacing:.1em}
+.badge .dot{width:8px;height:8px;border-radius:50%;background:#4ade80}
+.hero h1{margin:18px 0 14px;font-family:'M PLUS 1',sans-serif;font-size:clamp(27px,5.4vw,52px);line-height:1.28;font-weight:800;letter-spacing:-.01em}
+.hero h1 .grad{background:linear-gradient(135deg,#8fd6ff,#fff 60%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero .lead{margin:0;font-size:clamp(14px,2.2vw,17px);opacity:.94;max-width:44em}
+.hero-meta{margin-top:16px;font-size:13px;opacity:.8}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.hero-figure{margin-top:28px;border-radius:18px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 16px 40px rgba(0,0,0,.42)}
+.hero-stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.hero-stat{flex:1 1 150px;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16)}
+.hero-stat b{display:block;font-family:'M PLUS 1',sans-serif;font-size:clamp(20px,3.4vw,28px);line-height:1.3}
+.hero-stat span{font-size:12px;opacity:.82}
+
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:13px 24px;
+  overflow:hidden;border-radius:14px;background:var(--grad-accent);color:#fff!important;font-weight:900;text-decoration:none;
+  box-shadow:0 12px 30px rgba(8,102,255,.34);transition:transform .26s ease,box-shadow .26s ease}
+.btn::before{content:"";position:absolute;inset:0;transform:translateX(-130%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent);transition:transform .6s ease}
+.btn:hover{transform:translateY(-3px);box-shadow:0 18px 42px rgba(8,102,255,.46)}
+.btn:hover::before{transform:translateX(130%)}
+.btn.ghost{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.4);box-shadow:none}
+.btn.solid{background:var(--navy);box-shadow:0 12px 30px rgba(11,42,91,.28)}
+.btn.small{min-height:40px;padding:9px 16px;font-size:13px;border-radius:11px;box-shadow:var(--shadow)}
+
+.toollink{display:inline-flex;align-items:center;gap:7px;margin:4px 8px 4px 0;padding:8px 14px;border-radius:999px;
+  background:var(--white);border:1px solid var(--line);color:var(--blue)!important;font-size:13.5px;font-weight:800;
+  text-decoration:none;box-shadow:0 6px 16px rgba(8,32,80,.07);transition:transform .2s ease,border-color .2s ease}
+.toollink:hover{transform:translateY(-2px);border-color:var(--blue)}
+.toollink::after{content:"↗";font-size:11px;opacity:.7}
+
+.toc{margin:30px 0 0;padding:24px 26px;border-radius:var(--radius);background:var(--white);border:1px solid var(--line);box-shadow:var(--shadow)}
+.toc h2{margin:0 0 14px;font-family:'M PLUS 1',sans-serif;font-size:17px;color:var(--navy)}
+.toc ol{margin:0;padding-left:0;list-style:none;counter-reset:toc;display:grid;gap:6px;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))}  
+.toc li{counter-increment:toc}
+.toc a{display:flex;gap:10px;align-items:baseline;padding:8px 10px;border-radius:10px;color:var(--ink-soft)!important;
+  font-weight:700;font-size:14.5px;text-decoration:none;transition:background .2s ease,color .2s ease}
+.toc a::before{content:counter(toc,decimal-leading-zero);color:var(--blue);font-family:'M PLUS 1',sans-serif;font-size:13px}
+.toc a:hover,.toc a.active{background:var(--blue-soft);color:var(--navy)!important}
+
+.sidenav{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:40;display:none;flex-direction:column;gap:11px}
+.sidenav a{position:relative;width:11px;height:11px;border-radius:50%;background:var(--line);transition:background .25s ease,transform .25s ease}
+.sidenav a.active{background:var(--blue);transform:scale(1.45)}
+.sidenav a span{position:absolute;right:20px;top:50%;transform:translateY(-50%) translateX(6px);white-space:nowrap;
+  padding:5px 10px;border-radius:8px;background:var(--navy);color:#fff;font-size:11.5px;font-weight:700;
+  opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+.sidenav a:hover span{opacity:1;transform:translateY(-50%) translateX(0)}
+@media (min-width:1240px){.sidenav{display:flex}}
+
+.sec{margin-top:56px}
+.sec-label{margin:0;text-align:center;font-family:'M PLUS 1',sans-serif;font-size:12.5px;letter-spacing:.16em;color:var(--blue);font-weight:800}
+.sec-title{margin:6px 0 6px;text-align:center;font-family:'M PLUS 1',sans-serif;font-size:clamp(21px,4.4vw,31px);line-height:1.42;color:var(--navy);font-weight:800}
+.sec-lead{margin:0 auto;max-width:36em;text-align:center;font-size:14.5px;color:var(--muted)}
+
+.card{margin-top:22px;padding:clamp(20px,3.4vw,32px);border-radius:var(--radius);background:var(--white);
+  border:1px solid var(--line);box-shadow:var(--shadow);transition:transform .3s ease,box-shadow .3s ease}
+.card:hover{box-shadow:var(--shadow-hover)}
+.card h3{margin:26px 0 10px;font-family:'M PLUS 1',sans-serif;font-size:clamp(17px,2.8vw,21px);color:var(--navy);line-height:1.5}
+.card h3:first-child{margin-top:0}
+.card p{margin:0 0 12px}
+.card p:last-child{margin-bottom:0}
+.hl{background:linear-gradient(transparent 62%,rgba(8,102,255,.22) 62%);font-weight:800}
+
+.tilt{transform-style:preserve-3d;transition:transform .3s ease}
+
+.step{display:flex;gap:16px;padding:20px 0;border-top:1px dashed var(--line)}
+.step:first-of-type{border-top:0;padding-top:4px}
+.step-no{flex:0 0 42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:12px;
+  background:var(--grad-accent);color:#fff;font-family:'M PLUS 1',sans-serif;font-weight:800;font-size:17px;
+  box-shadow:0 8px 20px rgba(8,102,255,.28)}
+.step-body{flex:1;min-width:0}
+.step-body h4{margin:6px 0 8px;font-family:'M PLUS 1',sans-serif;font-size:16.5px;color:var(--navy);line-height:1.55}
+.step-body p{margin:0 0 10px;font-size:15px}
+
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:6px}
+.grid-item{padding:20px;border-radius:var(--radius-sm);background:var(--blue-soft);border:1px solid var(--line)}
+.grid-item .tag{display:inline-block;margin-bottom:8px;padding:3px 11px;border-radius:999px;background:var(--navy);color:#fff;font-size:11.5px;font-weight:800}
+.grid-item h4{margin:0 0 7px;font-family:'M PLUS 1',sans-serif;font-size:16px;color:var(--navy);line-height:1.5}
+.grid-item p{margin:0;font-size:14px;color:var(--ink-soft)}
+
+.takeaway{margin:0;padding:0;list-style:none;counter-reset:tk}
+.takeaway li{counter-increment:tk;position:relative;padding:14px 0 14px 46px;border-bottom:1px dashed var(--line)}
+.takeaway li:last-child{border-bottom:0}
+.takeaway li::before{content:counter(tk);position:absolute;left:0;top:14px;width:30px;height:30px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;background:var(--navy);color:#fff;font-size:14px;font-weight:800}
+.takeaway b{display:block;color:var(--navy);font-size:16px;line-height:1.6}
+.takeaway span{display:block;margin-top:5px;font-size:14.5px;color:var(--ink-soft)}
+
+.check{margin:0;padding:0;list-style:none}
+.check li{position:relative;padding:9px 0 9px 32px;font-size:15px}
+.check li::before{content:"";position:absolute;left:4px;top:17px;width:14px;height:8px;border-left:3px solid var(--blue);border-bottom:3px solid var(--blue);transform:rotate(-45deg)}
+
+.prompt{position:relative;margin:18px 0;border-radius:var(--radius-sm);background:var(--code-bg);
+  box-shadow:0 16px 38px rgba(4,20,54,.32);overflow:hidden}
+.prompt-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 16px;
+  background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.09)}
+.prompt-head b{color:#cfe4ff;font-size:12.5px;font-weight:800;letter-spacing:.04em;min-width:0}
+.copy{flex-shrink:0;white-space:nowrap;  
+  display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:0;border-radius:9px;cursor:pointer;
+  background:var(--blue);color:#fff;font-size:12px;font-weight:800;font-family:inherit;transition:background .2s ease,transform .2s ease}
+.copy:hover{transform:translateY(-1px)}
+.copy.done{background:var(--ok)}
+.prompt pre{margin:0;padding:18px 18px 20px;overflow-x:auto;color:#e6f0ff;font-size:13.5px;line-height:1.85;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Noto Sans JP',monospace;white-space:pre-wrap;word-break:break-word}
+
+.prompt.code pre{white-space:pre;word-break:normal;overflow-wrap:normal;font-size:12.5px;-webkit-overflow-scrolling:touch}
+
+.figure{margin:22px 0;border-radius:var(--radius-sm);overflow:hidden;background:var(--white);border:1px solid var(--line);box-shadow:var(--shadow)}
+.figure img{width:100%}
+.figure figcaption{padding:12px 16px;font-size:13px;color:var(--muted);background:var(--blue-soft);border-top:1px solid var(--line)}
+
+.video{margin:20px 0 0;border-radius:var(--radius-sm);overflow:hidden;background:#050d1f;aspect-ratio:16/9;box-shadow:var(--shadow)}
+.video iframe,.video video{width:100%;height:100%;border:0;display:block}
+.video-note{margin:12px 0 0;font-size:13.5px;color:var(--muted)}
+
+.table-scroll{margin:18px 0;overflow-x:auto;border-radius:var(--radius-sm);border:1px solid var(--line);background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14.5px}
+th,td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--navy);color:#fff;font-weight:800;white-space:nowrap}
+tbody tr:nth-child(even){background:var(--blue-soft)}
+tbody tr:last-child td{border-bottom:0}
+
+.note{margin:16px 0;padding:14px 18px;border-radius:var(--radius-sm);background:var(--blue-soft);border-left:4px solid var(--blue);font-size:14px;color:var(--ink-soft)}
+.note.warn{background:#fff8ec;border-left-color:var(--warn)}
+.note b{color:var(--navy)}
+.example{margin:12px 0;padding:14px 18px;border-radius:var(--radius-sm);background:#f4f8ff;border:1px dashed var(--blue);font-size:14px}
+
+.closing{margin-top:64px;padding:clamp(30px,5vw,52px);border-radius:26px;color:#fff;text-align:center;
+  background:var(--grad-hero);box-shadow:var(--shadow-hover);position:relative;overflow:hidden}
+.closing::after{content:"";position:absolute;width:340px;height:340px;left:-120px;bottom:-160px;border-radius:50%;
+  background:radial-gradient(circle,rgba(40,211,255,.28),transparent 70%);animation:float 8s ease-in-out infinite}
+.closing-inner{position:relative;z-index:1}
+.closing h2{margin:0 0 12px;font-family:'M PLUS 1',sans-serif;font-size:clamp(20px,4vw,30px);line-height:1.45}
+.closing p{margin:0 auto 10px;max-width:38em;font-size:15px;opacity:.94}
+.closing .btn{margin-top:20px}
+.bonus{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin:24px 0 4px;text-align:left}
+.bonus div{padding:14px 16px;border-radius:13px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18)}
+.bonus b{display:block;font-family:'M PLUS 1',sans-serif;font-size:19px}
+.bonus span{font-size:12.5px;opacity:.85}
+
+.foot{margin-top:34px;text-align:center;font-size:12.5px;color:var(--muted)}
+
+.totop{position:fixed;right:20px;bottom:22px;z-index:50;width:48px;height:48px;border:0;border-radius:50%;cursor:pointer;
+  background:var(--navy);color:#fff;font-size:19px;box-shadow:var(--shadow);opacity:0;pointer-events:none;
+  transition:opacity .3s ease,transform .3s ease}
+.totop.show{opacity:1;pointer-events:auto}
+.totop:hover{transform:translateY(-3px)}
+
+.rv{opacity:1;transform:none;transition:opacity .7s ease,transform .7s ease}
+.motion-ready .rv{opacity:0;transform:translateY(26px)}
+.motion-ready .rv.in{opacity:1;transform:none}
+
+@media (max-width:640px){
+  body{font-size:15.5px;line-height:1.9}
+  .step{gap:12px}
+  .step-no{flex-basis:36px;height:36px;font-size:15px}
+  .totop{right:14px;bottom:14px;width:44px;height:44px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rv,.motion-ready .rv{opacity:1;transform:none}
+}
+</style>
+<style>
+.diagram{margin:20px 0;padding:18px;border-radius:var(--radius-sm);background:var(--blue-soft);border:1px solid var(--line)}
+.diagram svg{display:block;width:100%;height:auto}
+.diagram figcaption{margin-top:10px;font-size:13px;color:var(--muted)}
+.rank{display:inline-block;margin-right:8px;padding:2px 12px;border-radius:999px;background:var(--grad-accent);color:#fff;font-size:13px;font-weight:900;vertical-align:middle}
+.mini{padding:18px 0;border-top:1px dashed var(--line)}
+.mini:first-of-type{border-top:0;padding-top:4px}
+.mini h3{margin-top:0}
+</style>
+</head>
+<body>
+
+<div class="progress"><span id="bar"></span></div>
+
+<nav class="sidenav" id="sidenav" aria-label="セクション">
+  <a href="#s1"><span>入れ方</span></a>
+  <a href="#s2"><span>早見表</span></a>
+  <a href="#s3"><span>15〜11位</span></a>
+  <a href="#s4"><span>10位 Canva</span></a>
+  <a href="#s5"><span>9位 Gamma</span></a>
+  <a href="#s6"><span>8位 Notion</span></a>
+  <a href="#s7"><span>7位 Metricool</span></a>
+  <a href="#s8"><span>6位 Plaud</span></a>
+  <a href="#s9"><span>5位 Zoom</span></a>
+  <a href="#s10"><span>4位 ドライブ</span></a>
+  <a href="#s11"><span>3位 カレンダー</span></a>
+  <a href="#s12"><span>2位 Gmail</span></a>
+  <a href="#s13"><span>1位 Plugin Creator</span></a>
+  <a href="#s14"><span>組み合わせ</span></a>
+  <a href="#s15"><span>GPTs</span></a>
+  <a href="#s16"><span>安全設定</span></a>
+  <a href="#s17"><span>詰まった時</span></a>
+</nav>
+
+<div class="page">
+  <header class="hero" id="hero">
+    <div class="hero-glow" id="glow"></div>
+    <div class="hero-inner">
+      <span class="badge"><span class="dot"></span>保存版資料｜入れ方とプロンプトまとめ</span>
+      <h1>プロが使ってる<br><span class="grad">ChatGPTプラグイン15選</span></h1>
+      <p class="lead">保存版資料のお受け取り、ありがとうございます。この資料では、プラグインの入れ方と使い方、仕事で使える15個のプラグインそれぞれの使いどころとプロンプト、組み合わせ方、GPTsからの乗り換え、入れたら必ずやる設定までをまとめています。</p>
+
+      <div class="hero-stats">
+        <div class="hero-stat"><b>15個</b><span>仕事で使えるプラグイン</span></div>
+        <div class="hero-stat"><b>29本</b><span>そのまま使えるプロンプト</span></div>
+        <div class="hero-stat"><b>0円</b><span>プラグイン自体の料金</span></div>
+      </div>
+
+      <div class="hero-cta">
+        <a class="btn" href="#s1">資料を読みはじめる →</a>
+      </div>
+
+      <p class="hero-meta">※ このページはブックマークして、作業しながら見返してください。内容は2026年10月時点の確認です。</p>
+    </div>
+  </header>
+
+  <nav class="toc rv">
+    <h2>この資料の中身</h2>
+    <ol>
+      <li><a href="#s1">プラグインとは／入れ方と呼び出し方</a></li>
+      <li><a href="#s2">15個の早見表</a></li>
+      <li><a href="#s3">第15位〜第11位</a></li>
+      <li><a href="#s4">第10位 Canva</a></li>
+      <li><a href="#s5">第9位 Gamma</a></li>
+      <li><a href="#s6">第8位 Notion</a></li>
+      <li><a href="#s7">第7位 Metricool</a></li>
+      <li><a href="#s8">第6位 Plaud</a></li>
+      <li><a href="#s9">第5位 Zoom</a></li>
+      <li><a href="#s10">第4位 Googleドライブ</a></li>
+      <li><a href="#s11">第3位 Googleカレンダー</a></li>
+      <li><a href="#s12">第2位 Gmail</a></li>
+      <li><a href="#s13">第1位 Plugin Creator</a></li>
+      <li><a href="#s14">組み合わせると一気に化ける</a></li>
+      <li><a href="#s15">GPTsからの乗り換え</a></li>
+      <li><a href="#s16">入れたら必ずやる3つの設定</a></li>
+      <li><a href="#s17">詰まった時のチェックリスト</a></li>
+    </ol>
+  </nav>
+
+  <section class="sec" id="s1" data-short="入れ方">
+    <p class="sec-label rv">STEP 01</p>
+    <h2 class="sec-title rv">プラグインとは／入れ方と呼び出し方</h2>
+    <p class="sec-lead rv">ChatGPTに、普段の仕事のツールを使わせるための仕組みです。</p>
+
+    <div class="card rv">
+      <p>ChatGPTを、新しく入ったAI社員だと思ってください。プラグインがないと、メールを読むのも資料を探すのも全部自分で、AI社員にはコピペで説明して渡すしかありません。プラグインを入れると、AI社員にメールや資料を見る権限を渡せるので、<span class="hl">「あれやっといて」の一言で仕事を進めてくれる</span>ようになります。</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 960 260" role="img" aria-label="プラグインなしでは自分がツールとChatGPTの間でコピペして伝言する。プラグインありではChatGPTがツールを直接使う">
+          <defs><marker id="b1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0866ff"/></marker></defs>
+          <text x="230" y="30" fill="#0b2a5b" font-size="20" font-weight="700" text-anchor="middle">プラグインなし</text>
+          <rect x="20" y="70" width="120" height="70" rx="12" fill="#fff" stroke="#d8e4f6" stroke-width="2"/><text x="80" y="112" fill="#22304a" font-size="17" text-anchor="middle">ツール</text>
+          <rect x="170" y="70" width="120" height="70" rx="12" fill="#0b2a5b"/><text x="230" y="112" fill="#fff" font-size="17" text-anchor="middle">自分</text>
+          <rect x="320" y="70" width="120" height="70" rx="12" fill="#fff" stroke="#d8e4f6" stroke-width="2"/><text x="380" y="112" fill="#22304a" font-size="17" text-anchor="middle">ChatGPT</text>
+          <path d="M140 105 L168 105" stroke="#0866ff" stroke-width="3" marker-end="url(#b1)"/>
+          <path d="M290 105 L318 105" stroke="#0866ff" stroke-width="3" marker-end="url(#b1)"/>
+          <text x="230" y="185" fill="#5c6880" font-size="15" text-anchor="middle">自分がコピペで伝言する</text>
+          <line x1="480" y1="20" x2="480" y2="240" stroke="#d8e4f6" stroke-width="2"/>
+          <text x="720" y="30" fill="#0b2a5b" font-size="20" font-weight="700" text-anchor="middle">プラグインあり</text>
+          <rect x="530" y="70" width="140" height="70" rx="12" fill="#fff" stroke="#0866ff" stroke-width="2"/><text x="600" y="112" fill="#22304a" font-size="17" text-anchor="middle">ツール</text>
+          <rect x="770" y="70" width="140" height="70" rx="12" fill="#0866ff"/><text x="840" y="112" fill="#fff" font-size="17" text-anchor="middle">ChatGPT</text>
+          <path d="M670 98 L768 98" stroke="#0866ff" stroke-width="3" marker-end="url(#b1)"/>
+          <path d="M768 115 L672 115" stroke="#0866ff" stroke-width="3" marker-end="url(#b1)"/>
+          <rect x="770" y="170" width="140" height="56" rx="12" fill="#0b2a5b"/><text x="840" y="204" fill="#fff" font-size="16" text-anchor="middle">自分は確認だけ</text>
+          <path d="M840 140 L840 168" stroke="#0866ff" stroke-width="3" marker-end="url(#b1)"/>
+        </svg>
+        <figcaption>プラグインを入れると、ChatGPTがツールを直接読んだり書いたりします。自分は出てきたものを確認するだけです。</figcaption>
+      </figure>
+
+      <h3>プラグインの中身は2つ</h3>
+      <div class="grid">
+        <div class="grid-item tilt"><span class="tag">アプリ</span><h4>ツールにつなぐ部分</h4><p>GmailやSlackなどのツールとChatGPTをつなぎ、情報を読んだり、決められた操作をしたりします。</p></div>
+        <div class="grid-item tilt"><span class="tag">スキル</span><h4>仕事の手順書</h4><p>どういう順番で何をするかの手順です。GPTsで書いていた指示文は、このスキルの方に入ります。</p></div>
+      </div>
+
+      <h3>入れ方</h3>
+      <div class="step">
+        <div class="step-no">1</div>
+        <div class="step-body">
+          <h4>サイドバーの「プラグイン」を開く</h4>
+          <p>ChatGPTのウェブ版・デスクトップ版・モバイル版の左のメニューにあります。一覧から探すか、上の検索欄で名前を入れます。</p>
+          <a class="toollink" href="https://help.openai.com/ja-jp/articles/20001256-plugins-in-chatgpt" target="_blank" rel="noopener">ChatGPTのプラグイン（公式ヘルプ）</a>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-no">2</div>
+        <div class="step-body">
+          <h4>使いたいプラグインを選んで「プラグインをインストール」</h4>
+          <p>説明・含まれるアプリ・必要な準備を確認してからインストールします。「デスクトップ専用」と書かれたものは、デスクトップアプリでだけ使えます。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-no">3</div>
+        <div class="step-body">
+          <h4>自分のアカウントでログインして接続する</h4>
+          <p>接続の画面が開いたら、使いたいアカウントでログインして許可します。</p>
+        </div>
+      </div>
+
+      <h3>呼び出し方</h3>
+      <p>頼んだ内容に関係があれば、ChatGPTが入れたプラグインを自動で使ってくれます。<b>確実に使わせたい時は「@Gmail」のように名前で指定</b>してください。いくつも入れていると、違うツールを見に行くことがあるからです。入力欄の「＋」から選ぶこともできます。</p>
+
+      <div class="note"><b>ポイント：</b>プラグイン自体は無料ですが、CanvaやGamma、Zoomのように相手のサービスのアカウントが必要なものは、そのサービスのプランで使える範囲が変わります。また、使える機能はChatGPTのプランや地域、ワークスペースの設定でも変わります。</div>
+    </div>
+  </section>
+
+  <section class="sec" id="s2" data-short="早見表">
+    <p class="sec-label rv">STEP 02</p>
+    <h2 class="sec-title rv">15個の早見表</h2>
+    <p class="sec-lead rv">選んだ基準は「毎日の仕事が、実際に減るかどうか」です。</p>
+
+    <div class="card rv">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>順位</th><th>プラグイン</th><th>できること</th><th>必要なもの</th></tr></thead>
+          <tbody>
+            <tr><td>1位</td><td>Plugin Creator</td><td>自分専用のプラグインを会話で作る</td><td>利用できるプラン・設定</td></tr>
+            <tr><td>2位</td><td>Gmail</td><td>メールの要約、返信の下書き</td><td>Googleアカウント</td></tr>
+            <tr><td>3位</td><td>Googleカレンダー</td><td>予定・空き時間の確認、予定の登録</td><td>Googleアカウント</td></tr>
+            <tr><td>4位</td><td>Googleドライブ</td><td>資料を探して読む・まとめる</td><td>Googleアカウント</td></tr>
+            <tr><td>5位</td><td>Zoom</td><td>過去の会議から話した場面を探す</td><td>Zoomの有料プランとAI Companion</td></tr>
+            <tr><td>6位</td><td>Plaud</td><td>録音から決まったことや宿題をまとめる</td><td>Plaudの録音機とアカウント</td></tr>
+            <tr><td>7位</td><td>Metricool</td><td>SNSの分析、投稿の作成・予約</td><td>Metricoolのアカウント</td></tr>
+            <tr><td>8位</td><td>Notion</td><td>ページを探す・作る・更新する</td><td>Notionのアカウント</td></tr>
+            <tr><td>9位</td><td>Gamma</td><td>提案資料・スライドを作る</td><td>Gammaのアカウント</td></tr>
+            <tr><td>10位</td><td>Canva</td><td>SNS画像・資料のデザインを作る</td><td>Canvaのアカウント</td></tr>
+            <tr><td>11位</td><td>vidIQ</td><td>YouTubeの分析・キーワード調査</td><td>vidIQのアカウント</td></tr>
+            <tr><td>12位</td><td>Higgsfield</td><td>画像・サムネイル・短い動画を作る</td><td>Higgsfieldのアカウント</td></tr>
+            <tr><td>13位</td><td>Slack</td><td>チャンネルの話をまとめる、返信を作る</td><td>Slackのワークスペース</td></tr>
+            <tr><td>14位</td><td>Spreadsheets</td><td>Excel・CSVの表を作る・整える</td><td>なし（OpenAI製）</td></tr>
+            <tr><td>15位</td><td>Tally</td><td>申し込みフォーム・アンケートを作る</td><td>Tallyのアカウント</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>各プラグインの公式紹介ページは、それぞれの章に置いています。</p>
+    </div>
+  </section>
+
+  <section class="sec" id="s3" data-short="15〜11位">
+    <p class="sec-label rv">STEP 03</p>
+    <h2 class="sec-title rv">第15位〜第11位</h2>
+    <p class="sec-lead rv">使う人によって刺さるものが分かれる5つです。自分の仕事に合うものから入れてください。</p>
+
+    <div class="card rv">
+      <div class="mini">
+        <h3><span class="rank">15位</span>Tally：申し込みフォームを作る</h3>
+        <p>申し込みフォームやアンケートを作れるツールです。ホームページやLINEに貼る、申し込みの入口を作りたい時に便利です。</p>
+        <div class="prompt">
+          <div class="prompt-head"><b>セミナーの申し込みフォームを作る</b><button class="copy" type="button">コピー</button></div>
+          <pre>@Tally セミナーの申し込みフォームを作ってください。
+名前とメールアドレスと、参加する日程を選べるようにしてください。必須の項目は少なめにしてください。</pre>
+        </div>
+        <a class="toollink" href="https://openai.com/ja-JP/business/plugins/tally/" target="_blank" rel="noopener">Tally プラグイン</a>
+      </div>
+
+      <div class="mini">
+        <h3><span class="rank">14位</span>Spreadsheets：Excel・CSVを整える</h3>
+        <p>ChatGPTを作っているOpenAIのプラグインで、Excel・CSVの表を作ったり整えたりします。売上やアンケートの表を、分析しやすい形にしたい時に使います。</p>
+        <div class="prompt">
+          <div class="prompt-head"><b>CSVを分析しやすい形に整える</b><button class="copy" type="button">コピー</button></div>
+          <pre>@Spreadsheets 添付した売上のCSVを、分析しやすい形に整えてください。
+日付の書き方をそろえて、重複している行に印をつけて、整えたファイルと、何を変えたかの説明を返してください。</pre>
+        </div>
+        <a class="toollink" href="https://openai.com/ja-JP/business/plugins/spreadsheets/" target="_blank" rel="noopener">Spreadsheets プラグイン</a>
+      </div>
+
+      <div class="mini">
+        <h3><span class="rank">13位</span>Slack：チャンネルの話をまとめる</h3>
+        <p>チームのやり取りにSlackを使っているなら、流れの速いチャンネルを全部追いかけなくても、要点だけまとめてもらえます。返信の文章を作ってもらうこともできます。</p>
+        <div class="prompt">
+          <div class="prompt-head"><b>1週間分の話をまとめる</b><button class="copy" type="button">コピー</button></div>
+          <pre>@Slack （チャンネル名）の、この1週間の話を、決まったこと・担当者・次にやることに分けてまとめてください。</pre>
+        </div>
+        <a class="toollink" href="https://openai.com/ja-JP/business/plugins/slack/" target="_blank" rel="noopener">Slack プラグイン</a>
+      </div>
+
+      <div class="mini">
+        <h3><span class="rank">12位</span>Higgsfield：画像・サムネイル・短い動画を作る</h3>
+        <p>画像や動画を作るAIをまとめて使えるサービスです。商品の画像、SNSの画像、YouTubeのサムネイル、短い動画まで、ChatGPTからそのまま作れます。使うにはHiggsfieldのアカウントを接続します。作れる量はHiggsfield側のプランで変わります。</p>
+        <div class="prompt">
+          <div class="prompt-head"><b>商品写真からSNS用の画像を作る</b><button class="copy" type="button">コピー</button></div>
+          <pre>@Higgsfield 添付した商品写真をもとに、Instagram投稿用の画像を3案作ってください。
+商品の形や色は変えずに、見出しを入れるための余白を残してください。</pre>
+        </div>
+        <a class="toollink" href="https://openai.com/ja-JP/business/plugins/higgsfield/" target="_blank" rel="noopener">Higgsfield プラグイン</a>
+      </div>
+
+      <div class="mini">
+        <h3><span class="rank">11位</span>vidIQ：YouTubeを分析する</h3>
+        <p>自分のチャンネルの分析、キーワードの調査、競合チャンネルとの比較まで、ChatGPTの中でできます。YouTubeの企画を考える材料集めに向いています。</p>
+        <div class="prompt">
+          <div class="prompt-head"><b>競合チャンネルを比べて企画の材料を集める</b><button class="copy" type="button">コピー</button></div>
+          <pre>@vidIQ この3つのチャンネルを比べて、繰り返し伸びているテーマを教えてください。
+（チャンネル名を3つ書く）</pre>
+        </div>
+        <a class="toollink" href="https://openai.com/ja-JP/business/plugins/vidiq/" target="_blank" rel="noopener">vidIQ プラグイン</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="s4" data-short="10位 Canva">
+    <p class="sec-label rv">第10位</p>
+    <h2 class="sec-title rv">Canva：SNS画像と資料のデザイン</h2>
+    <p class="sec-lead rv">会話からそのままデザインを作って、チャットの中で直していけます。</p>
+
+    <div class="card rv">
+      <p>無料からでも使えるデザインツールです。プラグインを入れると、ChatGPTとの会話から、SNSの投稿画像や資料のデザインを作れます。すでにあるデザインを、別のサイズに作り直すのも得意です。</p>
+      <div class="prompt">
+        <div class="prompt-head"><b>告知画像を3パターン作る</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Canva 来週のセミナー告知のInstagram投稿を3パターン作ってください。
+タイトルは「AIでホームページを作る1時間講座」。文字は大きく、色は落ち着いたトーンでそろえてください。</pre>
+      </div>
+      <div class="prompt">
+        <div class="prompt-head"><b>別のサイズに作り直す</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Canva さっきのデザインを、Instagramのストーリー用と、ブログのアイキャッチ用のサイズにも作ってください。
+文字が読みやすい大きさのままにしてください。</pre>
+      </div>
+      <div class="note"><b>使い方のコツ：</b>最後の仕上げは自分の目で見て直す前提で、たたき台を一気に作る役として使うのが一番です。毎日使うというより、何かを作る時に使うものなので10位にしました。</div>
+      <a class="toollink" href="https://openai.com/ja-JP/business/plugins/canva/" target="_blank" rel="noopener">Canva プラグイン</a>
+    </div>
+  </section>
+
+  <section class="sec" id="s5" data-short="9位 Gamma">
+    <p class="sec-label rv">第9位</p>
+    <h2 class="sec-title rv">Gamma：提案資料とスライド</h2>
+    <p class="sec-lead rv">ChatGPTと一緒に練った企画を、そのまま資料にできます。</p>
+
+    <div class="card rv">
+      <p>文章からスライド資料を作ってくれるサービスです。プラグインを入れると、ChatGPTの中から提案資料やスライド、文書を作れます。Gamma側のプランによって作れる量が変わるので、そこだけ確認してください。</p>
+      <div class="prompt">
+        <div class="prompt-head"><b>企画から提案資料を作る</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Gamma ここまで話した新サービスの企画をもとに、お客さん向けの提案資料を5枚で作ってください。
+課題、提案、スケジュール、料金、次のステップの順にしてください。</pre>
+      </div>
+      <p>GmailとGammaを両方入れておくと、お客さんから来た修正のメールを読んで、そのまま資料を直すところまでつなげられます。</p>
+      <div class="prompt">
+        <div class="prompt-head"><b>修正依頼のメールを資料に反映する</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Gmail @Gamma お客さんから届いた、提案資料への修正依頼のメールを読んで、さっきの資料に反映してください。</pre>
+      </div>
+      <div class="note"><b>順位の理由：</b>資料を作る日は一気に時間が減りますが、毎日使うものではないので9位です。</div>
+      <a class="toollink" href="https://openai.com/ja-JP/business/plugins/gamma/" target="_blank" rel="noopener">Gamma プラグイン</a>
+    </div>
+  </section>
+
+  <section class="sec" id="s6" data-short="8位 Notion">
+    <p class="sec-label rv">第8位</p>
+    <h2 class="sec-title rv">Notion：話した結論を残して、次に使う</h2>
+    <p class="sec-lead rv">ChatGPTとの会話は、放っておくと他の会話に埋もれてしまいます。</p>
+
+    <div class="card rv">
+      <p>メモやマニュアルをまとめておけるツールです。プラグインを入れると、ChatGPTがNotionのページを探して読んだり、新しくページを作ったり、更新したりできます。おすすめは、ChatGPTと話して決まったことを、その場でNotionに残す使い方です。</p>
+      <div class="prompt">
+        <div class="prompt-head"><b>話した結論をNotionに残す</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Notion 今日話した新サービスの企画を、決まったこと・まだ決まっていないこと・次にやることに分けて、「企画メモ」というページにまとめてください。</pre>
+      </div>
+      <p>次に続きを考える時は、残したページを読ませるだけで、前に決まったことを踏まえて続きを考えてくれます。</p>
+      <div class="prompt">
+        <div class="prompt-head"><b>残したページから続きを考える</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Notion 「企画メモ」を読んで、まだ決まっていないことを1つずつ一緒に決めていきたいです。最初の1つから質問してください。</pre>
+      </div>
+      <div class="note"><b>順位の理由：</b>Notionを使っている人にはすごく効きますが、使っていない人もいるので8位です。</div>
+      <a class="toollink" href="https://openai.com/ja-JP/business/plugins/notion/" target="_blank" rel="noopener">Notion プラグイン</a>
+    </div>
+  </section>
+
+  <section class="sec" id="s7" data-short="7位 Metricool">
+    <p class="sec-label rv">第7位</p>
+    <h2 class="sec-title rv">Metricool：SNSの分析から投稿の予約まで</h2>
+    <p class="sec-lead rv">分析して「ふーん」で終わらせず、次の投稿までChatGPTの中で一周できます。</p>
+
+    <div class="card rv">
+      <p>いくつかのSNSをまとめて管理できるツールです。プラグインを入れると、SNSの反応のデータを見たり、おすすめの投稿時間を調べたり、投稿の作成や更新まで頼めます。</p>
+      <div class="prompt">
+        <div class="prompt-head"><b>先月の分析から来週の投稿案まで</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Metricool 先月のSNS投稿の反応を比べて、伸びた投稿の共通点を教えてください。
+そのうえで、来週の投稿スケジュールをおすすめの時間で提案してください。</pre>
+      </div>
+      <div class="note warn"><b>注意：</b>投稿の作成や予約は、内容を自分で確認してからにしてください。</div>
+      <div class="note"><b>順位の理由：</b>SNSをやっている人には必須級ですが、SNSの担当の人向けなので7位です。</div>
+      <a class="toollink" href="https://openai.com/ja-JP/business/plugins/metricool/" target="_blank" rel="noopener">Metricool プラグイン</a>
+    </div>
+  </section>
+
+  <section class="sec" id="s8" data-short="6位 Plaud">
+    <p class="sec-label rv">第6位</p>
+    <h2 class="sec-title rv">Plaud：対面の打ち合わせを材料にする</h2>
+    <p class="sec-lead rv">パソコンの外の会話まで、ChatGPTの材料にできます。</p>
+
+    <div class="card rv">
+      <p>会話を録音して、文字にしてくれる録音機です。録音をPlaudのアプリで文字にしておくと、プラグインを入れたChatGPTがその中身を探して、要点をまとめたり、宿題を抜き出したりしてくれます。</p>
+      <div class="prompt">
+        <div class="prompt-head"><b>打ち合わせの録音から宿題をまとめる</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Plaud 昨日のお客さんとの打ち合わせの録音から、決まったこと、宿題、次回までに準備することをまとめてください。</pre>
+      </div>
+      <div class="note"><b>順位の理由：</b>Plaudの録音機とアカウントが必要なので6位です。対面の打ち合わせや商談が多い人ほど効きます。</div>
+      <a class="toollink" href="https://openai.com/ja-JP/business/plugins/plaud/" target="_blank" rel="noopener">Plaud プラグイン</a>
+    </div>
+  </section>
+
+  <section class="sec" id="s9" data-short="5位 Zoom">
+    <p class="sec-label rv">第5位</p>
+    <h2 class="sec-title rv">Zoom：会議の中から、話した場面を探す</h2>
+    <p class="sec-lead rv">「あの話、どこでしたっけ？」で録画を最初から見返す必要がなくなります。</p>
+
+    <div class="card rv">
+      <p>プラグインを入れると、過去のZoom会議の中から、話した場面を探してくれます。見つかった場面は、そのまま録画で再生できます。次の打ち合わせの議題を作ってもらうこともできます。</p>
+      <div class="prompt">
+        <div class="prompt-head"><b>話した場面を探す</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Zoom 最近の会議の中から、料金について話した場面を探してください。</pre>
+      </div>
+      <div class="prompt">
+        <div class="prompt-head"><b>次の打ち合わせの議題を作る</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Zoom 前回の〇〇さんとの会議の内容をもとに、次の打ち合わせの議題と、事前に共有する資料の案を作ってください。</pre>
+      </div>
+      <div class="note warn"><b>使う前に確認：</b>このプラグインは、ZoomのAI機能「Zoom AI Companion」を使った会議分析をChatGPTから使う仕組みです。Zoomの有料プランで、AI Companionをオンにしておく必要があります。録画の場面を再生するのは、クラウドに録画を保存している場合です。</div>
+      <div class="note"><b>Plaudとの使い分け：</b>対面の打ち合わせならPlaud、Zoomでやった会議ならZoomプラグインです。</div>
+      <a class="toollink" href="https://openai.com/ja-JP/business/plugins/zoom/" target="_blank" rel="noopener">Zoom プラグイン</a>
+    </div>
+  </section>
+
+  <section class="sec" id="s10" data-short="4位 ドライブ">
+    <p class="sec-label rv">第4位</p>
+    <h2 class="sec-title rv">Googleドライブ：過去の資料を材料にする</h2>
+    <p class="sec-lead rv">AIに頼んで一般論が返ってくる時は、だいたい材料を渡していません。</p>
+
+    <div class="card rv">
+      <p>プラグインを入れると、ChatGPTがドライブの中を探して、Googleドキュメント・スプレッドシート・スライドを読んだり、まとめたりしてくれます。一番使えるのは、過去に作ったものを材料にして新しいものを作らせる使い方です。繋ぐだけで、一気に「自分っぽい」ものが出てきます。</p>
+      <div class="prompt">
+        <div class="prompt-head"><b>過去の告知文と同じトーンで作る</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Google Drive 「セミナー」フォルダにある過去の告知文を全部読んで、同じトーンで今回のセミナーの告知文を作ってください。</pre>
+      </div>
+      <div class="prompt">
+        <div class="prompt-head"><b>前の提案書から次のたたき台を作る</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Google Drive 「提案書」フォルダにある、前回の〇〇向けの提案書を読んで、今回の△△向けの提案書のたたき台を作ってください。変えるべきところには印をつけてください。</pre>
+      </div>
+      <div class="note"><b>順位の理由：</b>ほとんどの人がもう使っていて、過去の資料がそのまま材料になるので4位です。</div>
+      <a class="toollink" href="https://openai.com/ja-JP/business/plugins/google-drive/" target="_blank" rel="noopener">Google Drive プラグイン</a>
+    </div>
+  </section>
+
+  <section class="sec" id="s11" data-short="3位 カレンダー">
+    <p class="sec-label rv">第3位</p>
+    <h2 class="sec-title rv">Googleカレンダー：予定と「相談の続き」を管理する</h2>
+    <p class="sec-lead rv">予定の確認だけでなく、決めきれなかった話の続きをやる日まで入れておけます。</p>
+
+    <div class="card rv">
+      <p>プラグインを入れると、予定や空き時間を確認したり、予定を入れたりしてくれます。</p>
+      <div class="prompt">
+        <div class="prompt-head"><b>明日の動き方を決める</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Google Calendar 明日の予定を見て、集中して作業できる時間と、準備が必要な打ち合わせを教えてください。</pre>
+      </div>
+      <h3>おすすめの使い方：決めきれない話を、続きの日に回す</h3>
+      <div class="step">
+        <div class="step-no">1</div>
+        <div class="step-body">
+          <h4>決める日を予定に入れて、メモ欄に今日の内容を書いてもらう</h4>
+        </div>
+      </div>
+      <div class="prompt">
+        <div class="prompt-head"><b>相談の続きを予定に入れる</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Google Calendar この相談の続きを、来月の第1月曜の10時に予定として入れてください。
+予定のメモ欄には、今日話した内容と、次に決めることを書いておいてください。</pre>
+      </div>
+      <div class="step">
+        <div class="step-no">2</div>
+        <div class="step-body">
+          <h4>当日、メモを読ませて再開する</h4>
+        </div>
+      </div>
+      <div class="prompt">
+        <div class="prompt-head"><b>当日に続きから再開する</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Google Calendar 今日の10時の予定のメモを読んで、続きをやりましょう。</pre>
+      </div>
+      <div class="note warn"><b>注意：</b>予定を入れる・変える操作は、内容を確認してから許可してください。ほかの人を招待する予定は、特に気をつけてください。</div>
+      <div class="note"><b>順位の理由：</b>予定は毎日見るものなので3位です。</div>
+      <a class="toollink" href="https://openai.com/ja-JP/business/plugins/google-calendar/" target="_blank" rel="noopener">Google Calendar プラグイン</a>
+    </div>
+  </section>
+
+  <section class="sec" id="s12" data-short="2位 Gmail">
+    <p class="sec-label rv">第2位</p>
+    <h2 class="sec-title rv">Gmail：読む・まとめる・下書きまでは丸投げ</h2>
+    <p class="sec-lead rv">最後の送信だけ、自分で確認して送ります。</p>
+
+    <div class="card rv">
+      <p>プラグインを入れると、メールを読んで要約したり、返信の準備をしたりしてくれます。複数のGmailアカウントをまとめて繋げるので、仕事用と個人用を両方見てもらえます。</p>
+      <div class="prompt">
+        <div class="prompt-head"><b>返信が必要なメールと下書き</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Gmail 直近3日で返信が必要なメールを、優先度の高い順に並べてください。
+それぞれ、返信の下書きも作ってください。</pre>
+      </div>
+      <h3>下書きを自分らしくする</h3>
+      <p>先に、自分が送ったメールを読ませて、文章のクセをまとめてもらっておくと、一気に自分らしい下書きになります。</p>
+      <div class="prompt">
+        <div class="prompt-head"><b>自分の文章のクセをまとめる</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Gmail 私が送ったメールを30件読んで、書き出し・締め・よく使う言い回し・敬語の度合いなど、私の文章のクセをまとめてください。
+このあと返信の下書きを作る時は、このクセに合わせてください。</pre>
+      </div>
+      <div class="note warn"><b>注意：</b>送信まではさせず、下書きを作ってもらって、自分が確認して送るのが一番安全です。</div>
+      <div class="note"><b>順位の理由：</b>毎日必ず来るメールの作業が減るので2位です。</div>
+      <a class="toollink" href="https://openai.com/ja-JP/business/plugins/gmail/" target="_blank" rel="noopener">Gmail プラグイン</a>
+    </div>
+  </section>
+
+  <section class="sec" id="s13" data-short="1位 Plugin Creator">
+    <p class="sec-label rv">第1位</p>
+    <h2 class="sec-title rv">Plugin Creator：自分専用のプラグインを作る</h2>
+    <p class="sec-lead rv">GPTsで作っていたような自分専用のAIは、これからはプラグインとして作ります。</p>
+
+    <div class="card rv">
+      <p>会話しながら、自分専用のプラグインを作れるプラグインです。プラグインの一覧からPlugin Creatorをインストールして、「@plugin-creator」に作りたいものを伝えます。プラグイン一覧の「追加（＋）」から始めることもできます。</p>
+      <a class="toollink" href="https://help.openai.com/ja-jp/articles/20001256-plugins-in-chatgpt" target="_blank" rel="noopener">プラグインの作成（公式ヘルプ）</a>
+
+      <h3>今日紹介したプラグインを、1つの流れにまとめる</h3>
+      <div class="prompt">
+        <div class="prompt-head"><b>「毎朝の仕事報告」プラグインを作る</b><button class="copy" type="button">コピー</button></div>
+        <pre>@plugin-creator 「毎朝の仕事報告」プラグインを作ってください。
+Gmailから返信が必要なメール、Googleカレンダーから今日の予定、Zoomから昨日の会議の宿題を集めて、今日やることを3つに絞って出してください。
+出力はいつも同じ形になるように、テンプレートをそろえるスキルも入れてください。</pre>
+      </div>
+      <p>できたプラグインは、「@毎朝の仕事報告」のように名前で呼ぶだけで、同じ流れが毎回動きます。ChatGPTには決まった時間にタスクを動かす機能もあるので、毎朝自動で動かしておけば、朝起きた時には今日やることがまとまっています。</p>
+      <div class="prompt">
+        <div class="prompt-head"><b>毎朝自動で動かす</b><button class="copy" type="button">コピー</button></div>
+        <pre>毎朝8時に「@毎朝の仕事報告」を動かして、結果を教えてください。</pre>
+      </div>
+      <p>作ったプラグインを直したい時は、「@plugin-creator」と直したいプラグインを指定して、変えたいことを伝えます。</p>
+      <div class="prompt">
+        <div class="prompt-head"><b>作ったプラグインを直す</b><button class="copy" type="button">コピー</button></div>
+        <pre>@plugin-creator 「毎朝の仕事報告」に、今日が締め切りのタスクも一緒に出すように直してください。</pre>
+      </div>
+      <div class="note"><b>一覧にないツールは：</b>MCPという、外のツールとつなぐ仕組みを使えば、自分のプラグインに入れられる場合があります。ただし、使える範囲はプランやワークスペースの設定で変わります。</div>
+      <div class="note warn"><b>使う前に確認：</b>Plugin Creatorやスキルが使えるかどうかは、ChatGPTのプランやワークスペースの設定で変わります。自分のプラグイン一覧にPlugin Creatorが出てくるか、最初に確認してください。</div>
+      <div class="note"><b>順位の理由：</b>ここまでの全部をまとめて、自分の仕事の形にできるので1位です。</div>
+    </div>
+  </section>
+
+  <section class="sec" id="s14" data-short="組み合わせ">
+    <p class="sec-label rv">STEP 04</p>
+    <h2 class="sec-title rv">組み合わせると一気に化ける</h2>
+    <p class="sec-lead rv">プラグインは、1個ずつより組み合わせた時に力が出ます。</p>
+
+    <div class="card rv">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>組み合わせ</th><th>できること</th><th>使うプロンプト</th></tr></thead>
+          <tbody>
+            <tr><td>Gmail × Gamma</td><td>修正依頼のメールを読んで、資料を直す</td><td>第9位 Gamma</td></tr>
+            <tr><td>Gmail × カレンダー × Zoom</td><td>毎朝、今日やることを3つにまとめる</td><td>第1位 Plugin Creator</td></tr>
+            <tr><td>Googleドライブ × Canva</td><td>過去の告知文から文章を作り、そのまま告知画像にする</td><td>下のプロンプト</td></tr>
+            <tr><td>vidIQ × Notion</td><td>競合の分析結果を、企画メモとして残す</td><td>下のプロンプト</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prompt">
+        <div class="prompt-head"><b>告知文から告知画像まで</b><button class="copy" type="button">コピー</button></div>
+        <pre>@Google Drive @Canva 「セミナー」フォルダの過去の告知文と同じトーンで今回の告知文を作り、その内容でInstagram投稿の画像も3パターン作ってください。</pre>
+      </div>
+      <div class="prompt">
+        <div class="prompt-head"><b>分析結果を企画メモに残す</b><button class="copy" type="button">コピー</button></div>
+        <pre>@vidIQ @Notion この3つのチャンネルで繰り返し伸びているテーマを調べて、「企画メモ」というページに、テーマ・伸びている理由・自分のチャンネルでやるならの案、に分けて残してください。
+（チャンネル名を3つ書く）</pre>
+      </div>
+      <div class="note"><b>ポイント：</b>組み合わせる時も、使うプラグインを@で名指しすると確実です。</div>
+    </div>
+  </section>
+
+  <section class="sec" id="s15" data-short="GPTs">
+    <p class="sec-label rv">STEP 05</p>
+    <h2 class="sec-title rv">GPTsからの乗り換え</h2>
+    <p class="sec-lead rv">カスタムGPT（GPTs）は、2026年12月11日で提供が終わります（一部の法人向けワークスペースを除く）。</p>
+
+    <div class="card rv">
+      <p>2026年9月の発表時点では、終了日までは「マイGPT」から対象のGPTを選び、「プラグインに移行」を選ぶと、プラグインに引き継げるとされています。</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>引き継がれるもの</th><th>引き継がれないもの</th></tr></thead>
+          <tbody>
+            <tr><td>指示文（プラグインのスキルになる）</td><td>GPTで選んでいたモデル</td></tr>
+            <tr><td>ナレッジファイル（参照ファイルになる）</td><td>カスタムアクション（外のサービスとつなぐ独自の設定）</td></tr>
+            <tr><td>接続済みのアプリ</td><td>これまでの会話、GPTの共有設定</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <a class="toollink" href="https://www.watch.impress.co.jp/docs/news/2144103.html" target="_blank" rel="noopener">カスタムGPT終了の発表（Impress Watch）</a>
+      <h3>移行に間に合わなかった場合</h3>
+      <p>GPTsの指示文を控えてある方は、Plugin Creatorに貼れば作り直せます。終了後に移行の機能が残っているかは、ChatGPTの画面で確認してください。</p>
+      <div class="prompt">
+        <div class="prompt-head"><b>GPTsの指示文からプラグインを作り直す</b><button class="copy" type="button">コピー</button></div>
+        <pre>@plugin-creator 下に貼るGPTsの指示文を使って、同じことができるプラグインを作ってください。
+指示文はスキルとして入れて、足りない情報は私に質問してください。
+
+（ここにGPTsの指示文を貼る）</pre>
+      </div>
+      <div class="note"><b>ポイント：</b>カスタムアクションで外のサービスとつないでいた場合は、そのサービスのプラグインが一覧にあるかを先に探してください。あれば、そのプラグインを入れて組み合わせるのが早いです。</div>
+    </div>
+  </section>
+
+  <section class="sec" id="s16" data-short="安全設定">
+    <p class="sec-label rv">STEP 06</p>
+    <h2 class="sec-title rv">入れたら必ずやる3つの設定</h2>
+    <p class="sec-lead rv">任せる範囲を、自分で決めてから使います。</p>
+
+    <div class="card rv">
+      <h3>1．権限の設定</h3>
+      <p>権限は、プラグインにどこまで任せるかの設定です。ここで言う「アクション」は、プラグインがやる操作（メールを送る、予定を入れる、ファイルを作るなど）のことです。プロフィールメニューの「設定」→「プラグイン」→「権限」で選べます。</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>選択肢</th><th>どうなるか</th><th>おすすめ</th></tr></thead>
+          <tbody>
+            <tr><td>常に確認</td><td>読む前も、何かを変える前も確認してくる</td><td>慎重に始めたい時</td></tr>
+            <tr><td>読み取りアクションを許可</td><td>読むのは確認なし。何かを変える前は確認してくる</td><td><b>最初はこれ</b></td></tr>
+            <tr><td>低リスクのアクションを許可</td><td>リスクの低い操作は自動で許可。高いものは確認か拒否</td><td>慣れてから</td></tr>
+            <tr><td>すべてのアクションを許可</td><td>対応する操作を確認なしで進める</td><td>使わない</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>「すべてのアクションを許可」は、アカウント全体の設定には出てこず、アプリや接続アカウントごとの設定に出てくる場合があります。いきなりこれにすると、確認なしで操作が進んでしまうことがあるので、選ばないでください。</p>
+      <a class="toollink" href="https://help.openai.com/ja-jp/articles/20001495-managing-app-permissions-in-chatgpt" target="_blank" rel="noopener">アプリの権限管理（公式ヘルプ）</a>
+
+      <h3>2．使わないプラグインは外す</h3>
+      <p>プラグインは、入れていくとどんどん溜まっていきます。使わないのに権限だけ渡しっぱなしにしておくと、それ自体がリスクになります。使わなくなったものは、オフにするか外しておきましょう。ツールとの接続そのものを止めたい時は、設定から接続を解除します。</p>
+
+      <h3>3．学習に使われる設定を確認する</h3>
+      <p>個人のプラン（無料・Go・Plus・Pro）では、設定のデータコントロールにある「すべての人のためにモデルを改善する」がオンになっていると、会話がAIの学習に使われることがあります。仕事のメールや資料を扱うなら、ここは確認しておいてください。</p>
+
+      <div class="note"><b>権限を渡すと、楽になるだけではありません：</b>AIが、いつもの仕事の流れや自分のクセを分かった状態で動くので、出てくるものの質が上がります。急ぎの仕事が来た時も、説明なしですぐ任せられるようになります。</div>
+    </div>
+  </section>
+
+  <section class="sec" id="s17" data-short="詰まった時">
+    <p class="sec-label rv">STEP 07</p>
+    <h2 class="sec-title rv">詰まった時のチェックリスト</h2>
+    <p class="sec-lead rv">よくある症状と、まず確認するところをまとめました。</p>
+
+    <div class="card rv">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>症状</th><th>まず確認すること</th></tr></thead>
+          <tbody>
+            <tr><td>プラグインが一覧に出てこない</td><td>自分のプラン・地域・ワークスペースで使えるものか。会社のワークスペースなら管理者に確認。Codexでは反映まで時間がかかることがある</td></tr>
+            <tr><td>「デスクトップ専用」と出る</td><td>ChatGPTのデスクトップアプリで使う</td></tr>
+            <tr><td>「アプリの設定が必要」と出る</td><td>接続（ログインと許可）が終わっているか。会社のワークスペースは管理者の設定が必要なことがある</td></tr>
+            <tr><td>情報を読めない・操作できない</td><td>接続したアカウントが合っているか。そのアカウントで見られる情報か。権限の設定で止まっていないか</td></tr>
+            <tr><td>違うツールを見に行く</td><td>「@プラグイン名」で名指しする</td></tr>
+            <tr><td>Plugin Creatorが出てこない</td><td>プランやワークスペースの設定で使えるか確認する</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prompt">
+        <div class="prompt-head"><b>困った時の聞き方</b><button class="copy" type="button">コピー</button></div>
+        <pre>今こういうことをやろうとしています：（やりたいこと）
+この画面でこうなって進めません：（スクリーンショットを添付）
+何を確認すればいいか、順番に教えてください。</pre>
+      </div>
+
+      <h3>今日やることチェックリスト</h3>
+      <ul class="check">
+        <li>プラグインの一覧を開いて、15個のうち自分が使うツールを確認した</li>
+        <li>まずGmailを1個入れて、返信が必要なメールの下書きを作らせた</li>
+        <li>権限を「読み取りアクションを許可」にした</li>
+        <li>「すべての人のためにモデルを改善する」の設定を確認した</li>
+        <li>GPTsを使っていた人は、指示文を控えた</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="closing rv">
+    <div class="closing-inner">
+      <h2>入れたプラグインに、次の仕事を渡していく</h2>
+      <p>まず1個入れて動かせたら、あとは自分の面倒くさい仕事を1つずつ渡していくだけです。実際に運用していく中での改善や、最新のAI活用の情報は、公式LINEから参加できるコミュニティで配信しています。</p>
+
+      <div class="bonus">
+        <div><b>12</b><span>コミュニティ参加特典</span></div>
+        <div><b>20</b><span>セミナー参加特典</span></div>
+        <div><b>42</b><span>受け取れる特典の合計（LINEの10大特典を含む）</span></div>
+      </div>
+
+      <p>公式LINEから参加できる「AI×SNS攻略 月額0円コミュニティ」では、追加12大特典に加えて、最新のAI×マーケティング情報を配信しています。さらに「AI駆動型コンテンツビジネス 0→100完全攻略セミナー」にご参加いただくと、20大特典を受け取れます。案内はどちらも公式LINEから届きます。</p>
+
+      <a class="btn" href="#s1">もう一度、最初から見る</a>
+    </div>
+  </section>
+
+  <p class="foot">星川ユウヤ｜AIマーケちゃんねる</p>
+
+</div>
+
+<button class="totop" id="totop" type="button" aria-label="ページ上部へ戻る">↑</button>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce && 'IntersectionObserver' in window) document.documentElement.classList.add('motion-ready');
+
+  var bar = document.getElementById('bar');
+  var totop = document.getElementById('totop');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var p = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (bar) bar.style.width = p + '%';
+    if (totop) totop.classList.toggle('show', h.scrollTop > 640);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  if (totop) totop.addEventListener('click', function(){
+    window.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'});
+  });
+
+  var rv = document.querySelectorAll('.rv');
+  if ('IntersectionObserver' in window && !reduce){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {rootMargin:'0px 0px -12% 0px', threshold:0});  
+    rv.forEach(function(el){ if (el.offsetHeight > window.innerHeight) { el.classList.add('in'); } else { io.observe(el); } });  
+  } else {
+    rv.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  setTimeout(function(){ rv.forEach(function(el){ el.classList.add('in'); }); }, 2500);
+
+  var secs = Array.prototype.slice.call(document.querySelectorAll('section.sec[id]'));
+  var tocLinks = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.sidenav a'));
+  if (secs.length && 'IntersectionObserver' in window){
+    var spy = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(!e.isIntersecting) return;
+        var id = '#' + e.target.id;
+        tocLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === id); });
+        navLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === id); });
+      });
+    }, {rootMargin:'-45% 0px -45% 0px'});
+    secs.forEach(function(s){ spy.observe(s); });
+  }
+
+  document.querySelectorAll('.prompt .copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var pre = btn.closest('.prompt').querySelector('pre');
+      if(!pre) return;
+      var text = pre.innerText;
+      var done = function(){
+        var old = btn.textContent;
+        btn.textContent = 'コピーしました';
+        btn.classList.add('done');
+        setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 1600);
+      };
+      if (navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(text).then(done, fallback);
+      } else { fallback(); }
+      function fallback(){
+        var ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly','');
+        ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select();
+        try { if (document.execCommand('copy')) done(); else btn.textContent = '選択してコピー'; } catch(e){ btn.textContent = '選択してコピー'; }
+        document.body.removeChild(ta);
+      }
+    });
+  });
+
+  if (reduce) return;
+
+  var hero = document.getElementById('hero');
+  var glow = document.getElementById('glow');
+  if (hero && glow){
+    hero.addEventListener('pointermove', function(ev){
+      var r = hero.getBoundingClientRect();
+      glow.style.setProperty('--mx', ((ev.clientX - r.left) / r.width * 100) + '%');
+      glow.style.setProperty('--my', ((ev.clientY - r.top) / r.height * 100) + '%');
+    });
+  }
+
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches){
+    document.querySelectorAll('.tilt').forEach(function(el){
+      el.addEventListener('pointermove', function(ev){
+        var r = el.getBoundingClientRect();
+        var rx = ((ev.clientY - r.top) / r.height - .5) * -5;
+        var ry = ((ev.clientX - r.left) / r.width - .5) * 5;
+        el.style.transform = 'perspective(760px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) translateY(-3px)';
+      });
+      el.addEventListener('pointerleave', function(){ el.style.transform = ''; });
+    });
+  }
+})();
+</script>
+</body>
+</html>
