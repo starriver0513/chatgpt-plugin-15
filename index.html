@@ -237,8 +237,9 @@ tbody tr:last-child td{border-bottom:0}
 }
 </style>
 <style>
-.diagram{margin:20px 0;padding:18px;border-radius:var(--radius-sm);background:var(--blue-soft);border:1px solid var(--line)}
-.diagram svg{display:block;width:100%;height:auto}
+.diagram{margin:20px 0;padding:18px;border-radius:var(--radius-sm);background:var(--blue-soft);border:1px solid var(--line);overflow-x:auto}
+.diagram svg{display:block;width:100%;min-width:620px;height:auto}
+td:first-child{min-width:7.5em}
 .diagram figcaption{margin-top:10px;font-size:13px;color:var(--muted)}
 .rank{display:inline-block;margin-right:8px;padding:2px 12px;border-radius:999px;background:var(--grad-accent);color:#fff;font-size:13px;font-weight:900;vertical-align:middle}
 .mini{padding:18px 0;border-top:1px dashed var(--line)}
